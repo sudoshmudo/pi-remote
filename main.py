@@ -1,0 +1,82 @@
+import sys
+import requests
+import os
+import subprocess
+
+from fastapi import APIRouter, FastAPI
+
+OK = { "message": "OK" }
+
+class Group:
+    def __init__(self, tag):
+        self.prefix = '/{}'.format(tag.lower())
+        self.router = APIRouter()
+        self.tags = [tag]
+        
+app = FastAPI()
+
+kodi = Group('Kodi')
+pi = Group('Pi')
+raspotify = Group('Raspotify')
+resilio = Group('Resilio')
+transmission = Group('Transmission')
+
+groups = [kodi, pi, raspotify, resilio, transmission]
+
+@kodi.router.get("/start")
+async def kodi_start():
+    subprocess.Popen(["kodi"], start_new_session=True)
+    return OK
+
+@kodi.router.get("/update")
+async def kodi_update():
+    os.system('echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a')
+    os.system('kodi-send --action="UpdateLibrary(video)"')
+    return OK
+
+@kodi.router.get("/quit")
+async def kodi_quit():
+    os.system('kodi-send --action="Quit"')
+    return OK
+
+@kodi.router.get("/kill")
+async def kodi_kill():
+    os.system('pkill -9 kodi')
+    return OK
+
+@pi.router.get("/shutdown")
+async def shutdown():
+    os.system("shutdown -r now")
+    return OK
+    
+@raspotify.router.get("/restart")
+async def raspotify_restart():
+    os.system("dietpi-services restart raspotify")
+    return OK
+
+@resilio.router.get("/start")
+async def resilio_start():
+    os.system("cd /root/Desktop/resilio && docker-compose start")
+    return OK
+
+@resilio.router.get("/stop")
+async def resilio_stop():
+    os.system("cd /root/Desktop/resilio && docker-compose stop")
+    return OK
+
+@transmission.router.get("/start")
+async def transmission_start():
+    os.system("cd /root/Desktop/transmission && docker-compose start")
+    return OK
+
+@transmission.router.get("/stop")
+async def transmission_stop():
+    os.system("cd /root/Desktop/transmission && docker-compose stop")
+    return OK
+
+for group in groups:
+    app.include_router(
+        group.router,
+        prefix=group.prefix,
+        tags=group.tags,
+    )

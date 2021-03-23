@@ -5,7 +5,7 @@ import subprocess
 
 from fastapi import APIRouter, FastAPI
 
-OK = { "message": "OK" }
+OK = 'OK'
 
 class Group:
     def __init__(self, tag):
@@ -15,14 +15,24 @@ class Group:
         
 app = FastAPI()
 
+git = Group('Git')
 kodi = Group('Kodi')
 pi = Group('Pi')
 raspotify = Group('Raspotify')
 resilio = Group('Resilio')
+services = Group('Services')
 transmission = Group('Transmission')
 
-groups = [kodi, pi, raspotify, resilio, transmission]
+groups = [git, kodi, pi, raspotify, resilio, services, transmission]
 
+def free_memory():
+    os.system('echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a')
+
+@git.router.get("/pull")
+async def git_pull():
+    os.system('cd /root/git/pi-remote && git pull')
+    return OK    
+    
 @kodi.router.get("/start")
 async def kodi_start():
     subprocess.Popen(["kodi"], start_new_session=True)
@@ -30,7 +40,7 @@ async def kodi_start():
 
 @kodi.router.get("/update")
 async def kodi_update():
-    os.system('echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a')
+    free_memory()
     os.system('kodi-send --action="UpdateLibrary(video)"')
     return OK
 
@@ -42,6 +52,11 @@ async def kodi_quit():
 @kodi.router.get("/kill")
 async def kodi_kill():
     os.system('pkill -9 kodi')
+    return OK
+
+@pi.router.get("/free")
+async def shutdown():
+    free_memory()
     return OK
 
 @pi.router.get("/shutdown")
@@ -62,6 +77,16 @@ async def resilio_start():
 @resilio.router.get("/stop")
 async def resilio_stop():
     os.system("cd /root/Desktop/resilio && docker-compose stop")
+    return OK
+
+@services.router.get("/start")
+async def resilio_stop():
+    os.system("dietpi-services start")
+    return OK
+
+@services.router.get("/stop")
+async def resilio_stop():
+    os.system("dietpi-services stop")
     return OK
 
 @transmission.router.get("/start")

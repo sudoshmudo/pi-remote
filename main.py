@@ -31,6 +31,7 @@ def free_memory():
 @git.router.get("/pull")
 async def git_pull():
     os.system('cd /root/git/pi-remote && git pull')
+    os.system('cd /root/git/openapi-to-vcard && git pull')
     return OK    
     
 @kodi.router.get("/kill")

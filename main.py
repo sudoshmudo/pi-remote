@@ -1,9 +1,9 @@
-import sys
-import requests
 import os
 import subprocess
+import sys
 
 from fastapi import APIRouter, FastAPI
+import requests
 
 OK = 'OK'
 
@@ -33,6 +33,11 @@ async def git_pull():
     os.system('cd /root/git/pi-remote && git pull')
     return OK    
     
+@kodi.router.get("/kill")
+async def kodi_kill():
+    os.system('pkill -9 kodi')
+    return OK
+
 @kodi.router.get("/start")
 async def kodi_start():
     subprocess.Popen(["kodi"], start_new_session=True)
@@ -49,18 +54,13 @@ async def kodi_quit():
     os.system('kodi-send --action="Quit"')
     return OK
 
-@kodi.router.get("/kill")
-async def kodi_kill():
-    os.system('pkill -9 kodi')
-    return OK
-
 @pi.router.get("/free")
-async def shutdown():
+async def pi_free():
     free_memory()
     return OK
 
 @pi.router.get("/shutdown")
-async def shutdown():
+async def pi_shutdown():
     os.system("shutdown -r now")
     return OK
     
@@ -80,12 +80,12 @@ async def resilio_stop():
     return OK
 
 @services.router.get("/start")
-async def resilio_stop():
+async def services_start():
     os.system("dietpi-services start")
     return OK
 
 @services.router.get("/stop")
-async def resilio_stop():
+async def services_stop():
     os.system("dietpi-services stop")
     return OK
 

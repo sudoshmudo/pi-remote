@@ -15,6 +15,7 @@ class Group:
         
 app = FastAPI()
 
+fin = Group('Fin')
 git = Group('Git')
 kodi = Group('Kodi')
 pi = Group('Pi')
@@ -23,16 +24,27 @@ resilio = Group('Resilio')
 services = Group('Services')
 transmission = Group('Transmission')
 
-groups = [git, kodi, pi, raspotify, resilio, services, transmission]
+groups = [fin, git, kodi, pi, raspotify, resilio, services, transmission]
 
 def free_memory():
     os.system('echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a')
 
+@fin.router.get("/start")
+async def fin_start():
+    os.system("cd /root/git/fin && docker-compose start")
+    return OK
+
+@transmission.router.get("/stop")
+async def fin_stop():
+    os.system("cd /root/git/fin && docker-compose stop")
+    return OK
+    
 @git.router.get("/pull")
 async def git_pull():
-    os.system('cd /root/git/pi-remote && git pull')
-    os.system('cd /root/git/openapi-to-vcard && git pull')
     os.system('cd /root/git/db-backup && git pull')
+    os.system('cd /root/git/fin && git pull')
+    os.system('cd /root/git/openapi-to-vcard && git pull')
+    os.system('cd /root/git/pi-remote && git pull')
     return OK    
     
 @kodi.router.get("/kill")

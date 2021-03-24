@@ -34,7 +34,7 @@ async def fin_start():
     os.system("cd /root/git/fin && docker-compose start")
     return OK
 
-@transmission.router.get("/stop")
+@fin.router.get("/stop")
 async def fin_stop():
     os.system("cd /root/git/fin && docker-compose stop")
     return OK

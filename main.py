@@ -32,11 +32,17 @@ def free_memory():
 async def git_pull():
     os.system('cd /root/git/pi-remote && git pull')
     os.system('cd /root/git/openapi-to-vcard && git pull')
+    os.system('cd /root/git/db-backup && git pull')
     return OK    
     
 @kodi.router.get("/kill")
 async def kodi_kill():
     os.system('pkill -9 kodi')
+    return OK
+
+@kodi.router.get("/quit")
+async def kodi_quit():
+    os.system('kodi-send --action="Quit"')
     return OK
 
 @kodi.router.get("/start")
@@ -48,11 +54,6 @@ async def kodi_start():
 async def kodi_update():
     free_memory()
     os.system('kodi-send --action="UpdateLibrary(video)"')
-    return OK
-
-@kodi.router.get("/quit")
-async def kodi_quit():
-    os.system('kodi-send --action="Quit"')
     return OK
 
 @pi.router.get("/free")

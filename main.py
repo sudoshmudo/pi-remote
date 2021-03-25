@@ -52,6 +52,11 @@ async def kodi_kill():
     os.system('pkill -9 kodi')
     return OK
 
+@kodi.router.get("/pause")
+async def kodi_pause():
+    os.system('kodi-send --action="Pause"')
+    return OK
+
 @kodi.router.get("/quit")
 async def kodi_quit():
     os.system('kodi-send --action="Quit"')
@@ -66,6 +71,18 @@ async def kodi_start():
 async def kodi_update():
     free_memory()
     os.system('kodi-send --action="UpdateLibrary(video)"')
+    return OK
+
+@kodi.router.get("/zoom/in")
+async def kodi_zoom_in():
+    for i in range(6):
+        os.system('kodi-send --action="ZoomIn"')
+    return OK
+
+@kodi.router.get("/zoom/out")
+async def kodi_zoom_out():
+    for i in range(6):
+        os.system('kodi-send --action="ZoomOut"')
     return OK
 
 @pi.router.get("/free")

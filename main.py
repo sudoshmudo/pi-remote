@@ -15,6 +15,7 @@ class Group:
         
 app = FastAPI()
 
+backup = Group('Backup')
 fin = Group('Fin')
 git = Group('Git')
 kodi = Group('Kodi')
@@ -24,11 +25,16 @@ resilio = Group('Resilio')
 services = Group('Services')
 transmission = Group('Transmission')
 
-groups = [fin, git, kodi, pi, raspotify, resilio, services, transmission]
+groups = [backup, fin, git, kodi, pi, raspotify, resilio, services, transmission]
 
 def free_memory():
     os.system('echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a')
 
+@backup.router.get("/execute")
+async def backup_execute():
+    os.system("cd /root/git/db-backup && python3.7 main.py")
+    return OK    
+    
 @fin.router.get("/start")
 async def fin_start():
     os.system("cd /root/git/fin && docker-compose start")

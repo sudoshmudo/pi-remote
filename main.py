@@ -70,6 +70,7 @@ async def kodi_quit():
 
 @kodi.router.get("/start")
 async def kodi_start():
+    free_memory()
     subprocess.Popen(["kodi"], start_new_session=True)
     return OK
 

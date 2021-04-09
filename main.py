@@ -33,7 +33,12 @@ def free_memory():
 @backup.router.get("/execute")
 async def backup_execute():
     os.system("cd /root/git/db-backup && python3.7 main.py")
-    return OK    
+    return OK
+
+@backup.router.get("/restore")
+async def backup_restore():
+    os.system("cd /root/git/db-backup && python3.7 restore.py")
+    return OK
     
 @fin.router.get("/start")
 async def fin_start():

@@ -12,8 +12,9 @@ class Group:
         self.prefix = '/{}'.format(tag.lower())
         self.router = APIRouter()
         self.tags = [tag]
-        
-app = FastAPI()
+
+    def asdict(self):
+        return { 'name': self.tags[0] }
 
 backup = Group('Backup')
 fin = Group('Fin')
@@ -23,9 +24,10 @@ pi = Group('Pi')
 raspotify = Group('Raspotify')
 resilio = Group('Resilio')
 services = Group('Services')
-transmission = Group('Transmission')
 
-groups = [backup, fin, git, kodi, pi, raspotify, resilio, services, transmission]
+groups = [backup, fin, git, kodi, pi, raspotify, services]
+
+app = FastAPI(openapi_tags=[group.asdict() for group in groups])
 
 def free_memory():
     os.system('echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a')
@@ -88,13 +90,13 @@ async def kodi_update():
 
 @kodi.router.get("/zoom/in")
 async def kodi_zoom_in():
-    for i in range(6):
+    for _ in range(6):
         os.system('kodi-send --action="ZoomIn"')
     return OK
 
 @kodi.router.get("/zoom/out")
 async def kodi_zoom_out():
-    for i in range(6):
+    for _ in range(6):
         os.system('kodi-send --action="ZoomOut"')
     return OK
 
@@ -131,16 +133,6 @@ async def services_start():
 @services.router.get("/stop")
 async def services_stop():
     os.system("dietpi-services stop")
-    return OK
-
-@transmission.router.get("/start")
-async def transmission_start():
-    os.system("cd /root/Desktop/transmission && docker-compose start")
-    return OK
-
-@transmission.router.get("/stop")
-async def transmission_stop():
-    os.system("cd /root/Desktop/transmission && docker-compose stop")
     return OK
 
 for group in groups:

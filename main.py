@@ -85,19 +85,18 @@ async def kodi_start():
 
 @kodi.router.get("/update")
 async def kodi_update():
-    free_memory()
     os.system('kodi-send --action="UpdateLibrary(video)"')
     return OK
 
 @kodi.router.get("/zoom/in")
 async def kodi_zoom_in():
-    for _ in range(6):
+    for _ in range(12):
         os.system('kodi-send --action="ZoomIn"')
     return OK
 
 @kodi.router.get("/zoom/out")
 async def kodi_zoom_out():
-    for _ in range(6):
+    for _ in range(12):
         os.system('kodi-send --action="ZoomOut"')
     return OK
 

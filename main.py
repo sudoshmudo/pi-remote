@@ -86,6 +86,7 @@ async def kodi_start():
 @kodi.router.get("/update")
 async def kodi_update():
     os.system('kodi-send --action="UpdateLibrary(video)"')
+    os.system('kodi-send --action="CleanLibrary(video)"')
     return OK
 
 @kodi.router.get("/zoom/in")

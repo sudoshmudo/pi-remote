@@ -41,8 +41,6 @@ async def git_pull():
     os.system('cd /root/git/db-backup && git pull')
     os.system('cd /root/git/fin && git pull')
     os.system('cd /root/git/forward-ports && git pull')
-    os.system('cd /root/git/icons && git pull')
-    os.system('cd /root/git/openapi-to-vcard && git pull')
     os.system('cd /root/git/pi-remote && git pull')
     return OK    
     

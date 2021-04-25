@@ -43,7 +43,12 @@ async def git_pull():
     os.system('cd /root/git/forward-ports && git pull')
     os.system('cd /root/git/pi-remote && git pull')
     return OK    
-    
+
+@kodi.router.get("/debug", name="Debug")
+async def kodi_debug():
+    os.system('kodi-send --action="PlayerDebug"')
+    return OK
+
 @kodi.router.get("/kill", name="Kill")
 async def kodi_kill():
     os.system('pkill -9 kodi')

@@ -11,7 +11,7 @@ class Builder:
     def __init__(self, groups: [Group]):
         self.app = FastAPI(openapi_tags=[group.get_openapi_tag() for group in groups])
         self.base64_icons = {}
-        self.groups = groups
+        self.groups = [group for group in groups if group.name not in config.HIDDEN_GROUPS]
         
         self.create_missing_icons()
         self.get_base64_icons()

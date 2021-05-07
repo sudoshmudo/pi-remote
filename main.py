@@ -13,7 +13,7 @@ kodi = Group('Kodi')
 pi = Group('Pi', 'raspberrypi')
 raspotify = Group('Raspotify', 'spotify')
 services = Group('Services')
-transference = Group('Transference', 'transfer')
+transference = Group('Transference', 'download')
 
 groups = [backup, fin, git, kodi, pi, raspotify, services, transference]
 

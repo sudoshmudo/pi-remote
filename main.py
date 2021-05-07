@@ -13,6 +13,7 @@ kodi = Group('Kodi')
 pi = Group('Pi', 'raspberrypi')
 raspotify = Group('Raspotify', 'spotify')
 services = Group('Services')
+transference = Group('Transference', 'transfer')
 
 groups = [backup, fin, git, kodi, pi, raspotify, services]
 
@@ -28,21 +29,22 @@ async def backup_restore():
     
 @fin.router.get("/start", name="Start")
 async def fin_start():
-    os.system("cd /root/git/fin && docker-compose start")
+    os.system("cd /root/git/apps && docker-compose start fin-api")
+    os.system("cd /root/git/apps && docker-compose start fin-web")
     return OK
 
 @fin.router.get("/stop", name="Stop")
 async def fin_stop():
-    os.system("cd /root/git/fin && docker-compose stop")
+    os.system("cd /root/git/apps && docker-compose stop fin-api")
+    os.system("cd /root/git/apps && docker-compose stop fin-web")
     return OK
     
 @git.router.get("/pull", name="Pull")
 async def git_pull():
     os.system('cd /root/git/db-backup && git pull')
-    os.system('cd /root/git/fin && git pull')
     os.system('cd /root/git/forward-ports && git pull')
     os.system('cd /root/git/pi-remote && git pull')
-    return OK    
+    return OK  
 
 @kodi.router.get("/debug", name="Debug")
 async def kodi_debug():
@@ -110,6 +112,16 @@ async def services_start():
 @services.router.get("/stop", name="Stop")
 async def services_stop():
     os.system("dietpi-services stop")
+    return OK
+
+@transference.router.get("/start", name="Start")
+async def transference_start():
+    os.system("cd /root/git/apps && docker-compose start transference-api")
+    return OK
+
+@transference.router.get("/stop", name="Stop")
+async def transference_stop():
+    os.system("cd /root/git/apps && docker-compose stop transference-api")
     return OK
 
 app = Builder(groups).app

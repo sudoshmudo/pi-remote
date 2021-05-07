@@ -15,7 +15,7 @@ raspotify = Group('Raspotify', 'spotify')
 services = Group('Services')
 transference = Group('Transference', 'transfer')
 
-groups = [backup, fin, git, kodi, pi, raspotify, services]
+groups = [backup, fin, git, kodi, pi, raspotify, services, transference]
 
 @backup.router.get("/execute", name="Backup")
 async def backup_execute():

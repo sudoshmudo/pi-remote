@@ -22,6 +22,11 @@ async def backup_execute():
     os.system("cd /root/git/db-backup && python3 main.py")
     return OK
 
+@backup.router.get("/database/init", name="Backup")
+async def backup_database_init():
+    os.system("cd /root/git/db-backup && python3 create.py")
+    return OK
+
 @backup.router.get("/restore", name="Restore")
 async def backup_restore():
     os.system("cd /root/git/db-backup && python3 restore.py")

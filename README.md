@@ -3,6 +3,14 @@ API for bash scripts and commands.
 ## Getting Started
 
 Install requirements, python, FastAPI and uvicorn.
+```
+pip3 install -r requirements.txt
+```
+
+Additional dependency, Image module:
+```
+apt-get install libopenjp2-7
+```
 
 ## Running it as a service
 

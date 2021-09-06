@@ -65,6 +65,10 @@ async def kodi_start():
 @kodi.router.get("/update", name="Kodi Update")
 async def kodi_update():
     os.system('kodi-send --action="UpdateLibrary(video)"')
+    return OK
+
+@kodi.router.get("/clean", name="Kodi Clean")
+async def kodi_update():
     os.system('kodi-send --action="CleanLibrary(video)"')
     return OK
 
